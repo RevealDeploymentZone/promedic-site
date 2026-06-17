@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Products - Affordable Meds, Supplements & Medical Devices | Promedic</title>
+  <meta name="description" content="Shop 150+ affordable medications, OTC drugs, supplements, and medical devices. Prescription (Rx), OTC, Supplements, Medical Devices. Free shipping on $75+.">
+  <meta name="keywords" content="affordable meds, buy medications online, OTC drugs, supplements, medical devices, prescription medications">
+  <link rel="canonical" href="https://promedic.us/products.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"CollectionPage","name":"Promedic Products","description":"Shop 150+ affordable meds, OTC drugs, supplements, and medical devices.","url":"https://promedic.us/products.html"}
+  </script>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div id="cart-placeholder"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>All Products</h1>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href='/'>Home</a><span aria-hidden="true">›</span><span aria-current="page">Products</span>
+      </nav>
+    </div>
+  </div>
+
+  <main id="main-content">
+    <section class="section">
+      <div class="container">
+        <!-- FILTERS -->
+        <div class="filter-bar" role="search" aria-label="Filter products">
+          <div class="filter-row">
+            <div class="filter-group filter-search">
+              <label for="product-search">Search Products</label>
+              <input type="search" id="product-search" class="form-control" placeholder="Search by name, condition, or ingredient..." oninput="filterProducts()">
+            </div>
+            <div class="filter-group">
+              <label for="cat-filter">Category</label>
+              <select id="cat-filter" class="form-control" onchange="filterProducts()">
+                <option value="all">All Categories</option>
+                <option value="rx">Prescription (Rx)</option>
+                <option value="otc">OTC Medications</option>
+                <option value="supplement">Supplements</option>
+                <option value="device">Medical Devices</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="sort-filter">Sort By</label>
+              <select id="sort-filter" class="form-control" onchange="filterProducts()">
+                <option value="default">Featured</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="rating">Best Rated</option>
+                <option value="name">Name A-Z</option>
+              </select>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="clearFilters()" style="align-self:flex-end">Clear Filters</button>
+          </div>
+        </div>
+
+        <!-- CATEGORY TABS -->
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px" role="tablist" aria-label="Product category tabs">
+          <button class="category-card" style="padding:10px 18px;text-align:left;border-radius:999px;display:inline-flex;align-items:center;gap:6px;font-size:13px" data-cat="all" onclick="selectCat('all')" role="tab" aria-selected="true">🏥 All (150)</button>
+          <button class="category-card" style="padding:10px 18px;text-align:left;border-radius:999px;display:inline-flex;align-items:center;gap:6px;font-size:13px" data-cat="rx" onclick="selectCat('rx')" role="tab" aria-selected="false">💊 Prescription Rx</button>
+          <button class="category-card" style="padding:10px 18px;text-align:left;border-radius:999px;display:inline-flex;align-items:center;gap:6px;font-size:13px" data-cat="otc" onclick="selectCat('otc')" role="tab" aria-selected="false">🩹 OTC</button>
+          <button class="category-card" style="padding:10px 18px;text-align:left;border-radius:999px;display:inline-flex;align-items:center;gap:6px;font-size:13px" data-cat="supplement" onclick="selectCat('supplement')" role="tab" aria-selected="false">🌿 Supplements</button>
+          <button class="category-card" style="padding:10px 18px;text-align:left;border-radius:999px;display:inline-flex;align-items:center;gap:6px;font-size:13px" data-cat="device" onclick="selectCat('device')" role="tab" aria-selected="false">🩺 Devices</button>
+          <button class="category-card" style="padding:10px 18px;text-align:left;border-radius:999px;display:inline-flex;align-items:center;gap:6px;font-size:13px" data-cat="other" onclick="selectCat('other')" role="tab" aria-selected="false">🧪 Other</button>
+        </div>
+
+        <!-- RESULTS COUNT -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:8px">
+          <p id="results-count" style="font-size:14px;color:var(--gray-500)" aria-live="polite">Showing 150 products</p>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:13px;color:var(--gray-400)">View:</span>
+            <button onclick="setGrid(4)" class="btn btn-sm btn-outline" aria-label="4 column grid" id="grid-4">▦ Grid</button>
+            <button onclick="setGrid(2)" class="btn btn-sm btn-outline" aria-label="2 column list" id="grid-2">▤ List</button>
+          </div>
+        </div>
+
+        <!-- PRODUCTS GRID -->
+        <div class="products-grid" id="products-grid" aria-label="Products"></div>
+
+        <!-- PAGINATION -->
+        <div style="display:flex;justify-content:center;gap:8px;margin-top:40px;flex-wrap:wrap" role="navigation" aria-label="Product pagination" id="pagination"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/products-data.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const PAGE_SIZE = 24;
+    let currentPage = 1;
+    let filteredProducts = [...PROMEDIC_PRODUCTS];
+
+    function filterProducts() {
+      const q = document.getElementById('product-search').value.toLowerCase();
+      const cat = document.getElementById('cat-filter').value;
+      const sort = document.getElementById('sort-filter').value;
+
+      filteredProducts = PROMEDIC_PRODUCTS.filter(p => {
+        const matchCat = cat === 'all' || p.category === cat;
+        const matchQ = !q || p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q) || p.tags.some(t => t.includes(q)) || p.subcategory.toLowerCase().includes(q);
+        return matchCat && matchQ;
+      });
+
+      if (sort === 'price-asc') filteredProducts.sort((a,b) => a.price - b.price);
+      else if (sort === 'price-desc') filteredProducts.sort((a,b) => b.price - a.price);
+      else if (sort === 'rating') filteredProducts.sort((a,b) => b.rating - a.rating);
+      else if (sort === 'name') filteredProducts.sort((a,b) => a.name.localeCompare(b.name));
+
+      currentPage = 1;
+      renderPage();
+    }
+
+    function renderPage() {
+      const start = (currentPage - 1) * PAGE_SIZE;
+      const end = start + PAGE_SIZE;
+      const pageProducts = filteredProducts.slice(start, end);
+      const grid = document.getElementById('products-grid');
+      grid.innerHTML = pageProducts.length ? pageProducts.map(p => renderProductCard(p)).join('') : '<p style="grid-column:1/-1;text-align:center;color:var(--gray-400);padding:40px">No products found. Try a different search.</p>';
+      document.getElementById('results-count').textContent = `Showing ${Math.min(end, filteredProducts.length)} of ${filteredProducts.length} products`;
+      renderPagination();
+    }
+
+    function renderPagination() {
+      const pages = Math.ceil(filteredProducts.length / PAGE_SIZE);
+      const el = document.getElementById('pagination');
+      if (pages <= 1) { el.innerHTML = ''; return; }
+      let html = '';
+      for (let i = 1; i <= pages; i++) {
+        html += `<button onclick="goPage(${i})" class="btn ${i === currentPage ? 'btn-primary' : 'btn-outline'} btn-sm" aria-label="Page ${i}" aria-current="${i === currentPage ? 'page' : 'false'}">${i}</button>`;
+      }
+      el.innerHTML = html;
+    }
+
+    function goPage(n) { currentPage = n; renderPage(); window.scrollTo({top: 300, behavior:'smooth'}); }
+
+    function selectCat(cat) {
+      document.getElementById('cat-filter').value = cat;
+      document.querySelectorAll('[data-cat]').forEach(b => { b.classList.toggle('active', b.dataset.cat === cat); b.setAttribute('aria-selected', b.dataset.cat === cat); });
+      filterProducts();
+    }
+
+    function clearFilters() {
+      document.getElementById('product-search').value = '';
+      document.getElementById('cat-filter').value = 'all';
+      document.getElementById('sort-filter').value = 'default';
+      selectCat('all');
+    }
+
+    function setGrid(cols) {
+      const grid = document.getElementById('products-grid');
+      grid.style.gridTemplateColumns = cols === 2 ? '1fr 1fr' : '';
+    }
+
+    // Read URL params
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('cat')) { document.getElementById('cat-filter').value = params.get('cat'); selectCat(params.get('cat')); }
+      if (params.get('search')) { document.getElementById('product-search').value = params.get('search'); }
+      filterProducts();
+    });
+  </script>
+</body>
+</html>
