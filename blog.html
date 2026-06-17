@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health & Wellness Blog | Promedic - Affordable Meds</title>
+  <meta name="description" content="Expert health tips, medication guides, supplement reviews, and wellness advice from Promedic. Your source for affordable meds and health information.">
+  <meta name="keywords" content="affordable meds blog, medication tips, health wellness, supplements guide, prescription savings">
+  <link rel="canonical" href="https://promedic.us/blog.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div id="cart-placeholder"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>Health & Wellness Blog</h1>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href='/'>Home</a><span>›</span><span aria-current="page">Blog</span>
+      </nav>
+    </div>
+  </div>
+
+  <main id="main-content">
+    <section class="section">
+      <div class="container">
+        <!-- BLOG FILTER -->
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px" role="tablist" aria-label="Blog categories">
+          <button class="category-card active" style="padding:8px 18px;border-radius:999px;font-size:13px" data-tag="all" onclick="filterBlog('all')" role="tab" aria-selected="true">All Articles</button>
+          <button class="category-card" style="padding:8px 18px;border-radius:999px;font-size:13px" data-tag="medications" onclick="filterBlog('medications')" role="tab" aria-selected="false">💊 Medications</button>
+          <button class="category-card" style="padding:8px 18px;border-radius:999px;font-size:13px" data-tag="supplements" onclick="filterBlog('supplements')" role="tab" aria-selected="false">🌿 Supplements</button>
+          <button class="category-card" style="padding:8px 18px;border-radius:999px;font-size:13px" data-tag="devices" onclick="filterBlog('devices')" role="tab" aria-selected="false">🩺 Devices</button>
+          <button class="category-card" style="padding:8px 18px;border-radius:999px;font-size:13px" data-tag="wellness" onclick="filterBlog('wellness')" role="tab" aria-selected="false">❤️ Wellness</button>
+          <button class="category-card" style="padding:8px 18px;border-radius:999px;font-size:13px" data-tag="savings" onclick="filterBlog('savings')" role="tab" aria-selected="false">💰 Savings Tips</button>
+        </div>
+
+        <div class="blog-grid" id="blog-grid">
+          <!-- Featured post -->
+          <article class="blog-card" style="grid-column:span 2" data-tag="savings medications">
+            <div style="display:grid;grid-template-columns:1fr 1fr">
+              <div class="blog-image" style="height:100%;min-height:200px" aria-hidden="true">💊</div>
+              <div class="blog-body" style="padding:28px">
+                <div class="blog-meta"><span class="blog-tag">Savings Tips</span><span>June 10, 2026</span><span>8 min read</span></div>
+                <h2 class="blog-title" style="font-size:1.3rem"><a href='/blog-post'>How to Save Money on Prescription Medications in 2026</a></h2>
+                <p class="blog-excerpt">With prescription drug costs at an all-time high, millions of Americans struggle to afford the medications they need. Discover 10 proven strategies to dramatically reduce your medication costs without compromising your health or safety...</p>
+                <a class='btn btn-primary btn-sm' href='/blog-post' style='margin-top:16px'>Read Full Article</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="blog-card" data-tag="supplements">
+            <div class="blog-image" aria-hidden="true">🌿</div>
+            <div class="blog-body">
+              <div class="blog-meta"><span class="blog-tag">Supplements</span><span>June 5, 2026</span></div>
+              <h3 class="blog-title"><a href='/blog-post'>Top 10 Supplements for Immune System Support</a></h3>
+              <p class="blog-excerpt">Science-backed supplements including Vitamin D3, Zinc, Elderberry, and Quercetin that can help strengthen your immune system and reduce the frequency of illness...</p>
+            </div>
+            <div class="blog-footer"><a class='btn btn-outline btn-sm' href='/blog-post'>Read More</a></div>
+          </article>
+
+          <article class="blog-card" data-tag="devices">
+            <div class="blog-image" aria-hidden="true">🩺</div>
+            <div class="blog-body">
+              <div class="blog-meta"><span class="blog-tag">Medical Devices</span><span>June 1, 2026</span></div>
+              <h3 class="blog-title"><a href='/blog-post'>Best Home Medical Devices for Chronic Disease Management</a></h3>
+              <p class="blog-excerpt">Essential home monitoring devices for managing diabetes, hypertension, asthma, and other chronic conditions. Reviews of the best blood pressure monitors, glucose meters...</p>
+            </div>
+            <div class="blog-footer"><a class='btn btn-outline btn-sm' href='/blog-post'>Read More</a></div>
+          </article>
+
+          <article class="blog-card" data-tag="medications">
+            <div class="blog-image" aria-hidden="true">❤️</div>
+            <div class="blog-body">
+              <div class="blog-meta"><span class="blog-tag">Medications</span><span>May 28, 2026</span></div>
+              <h3 class="blog-title"><a href='/blog-post'>Understanding Generic vs Brand-Name Medications</a></h3>
+              <p class="blog-excerpt">Are generic medications as effective as brand-name drugs? Learn the FDA's requirements for generic drugs and why choosing generics can save you up to 85%...</p>
+            </div>
+            <div class="blog-footer"><a class='btn btn-outline btn-sm' href='/blog-post'>Read More</a></div>
+          </article>
+
+          <article class="blog-card" data-tag="wellness">
+            <div class="blog-image" aria-hidden="true">🧘</div>
+            <div class="blog-body">
+              <div class="blog-meta"><span class="blog-tag">Wellness</span><span>May 22, 2026</span></div>
+              <h3 class="blog-title"><a href='/blog-post'>The Role of Magnesium in Sleep, Stress, and Heart Health</a></h3>
+              <p class="blog-excerpt">Magnesium deficiency affects over 50% of Americans. Discover how this essential mineral impacts your sleep quality, stress response, and cardiovascular health...</p>
+            </div>
+            <div class="blog-footer"><a class='btn btn-outline btn-sm' href='/blog-post'>Read More</a></div>
+          </article>
+
+          <article class="blog-card" data-tag="savings">
+            <div class="blog-image" aria-hidden="true">💰</div>
+            <div class="blog-body">
+              <div class="blog-meta"><span class="blog-tag">Savings Tips</span><span>May 18, 2026</span></div>
+              <h3 class="blog-title"><a href='/blog-post'>Medicare & Insurance: Maximizing Your Medication Benefits</a></h3>
+              <p class="blog-excerpt">Navigate Medicare Part D, prior authorizations, and insurance formularies to pay less for your medications. Expert tips for Medicare beneficiaries in all 50 states...</p>
+            </div>
+            <div class="blog-footer"><a class='btn btn-outline btn-sm' href='/blog-post'>Read More</a></div>
+          </article>
+
+          <article class="blog-card" data-tag="supplements">
+            <div class="blog-image" aria-hidden="true">🐟</div>
+            <div class="blog-body">
+              <div class="blog-meta"><span class="blog-tag">Supplements</span><span>May 12, 2026</span></div>
+              <h3 class="blog-title"><a href='/blog-post'>Omega-3 Fatty Acids: Benefits, Dosage, and Best Sources</a></h3>
+              <p class="blog-excerpt">A complete guide to omega-3 fatty acids — from EPA and DHA to ALA. Learn about cardiovascular benefits, cognitive function, and how to choose a quality supplement...</p>
+            </div>
+            <div class="blog-footer"><a class='btn btn-outline btn-sm' href='/blog-post'>Read More</a></div>
+          </article>
+
+          <article class="blog-card" data-tag="medications wellness">
+            <div class="blog-image" aria-hidden="true">🩸</div>
+            <div class="blog-body">
+              <div class="blog-meta"><span class="blog-tag">Wellness</span><span>May 5, 2026</span></div>
+              <h3 class="blog-title"><a href='/blog-post'>Managing Type 2 Diabetes: Medications, Diet, and Lifestyle</a></h3>
+              <p class="blog-excerpt">A comprehensive guide to managing Type 2 diabetes including metformin therapy, blood glucose monitoring, dietary changes, and lifestyle modifications for better control...</p>
+            </div>
+            <div class="blog-footer"><a class='btn btn-outline btn-sm' href='/blog-post'>Read More</a></div>
+          </article>
+
+          <article class="blog-card" data-tag="wellness">
+            <div class="blog-image" aria-hidden="true">😴</div>
+            <div class="blog-body">
+              <div class="blog-meta"><span class="blog-tag">Wellness</span><span>April 28, 2026</span></div>
+              <h3 class="blog-title"><a href='/blog-post'>Natural Sleep Aids: Melatonin, Valerian, and L-Theanine</a></h3>
+              <p class="blog-excerpt">Struggling with insomnia? Compare the evidence behind popular natural sleep supplements and learn which ones are most effective for different types of sleep problems...</p>
+            </div>
+            <div class="blog-footer"><a class='btn btn-outline btn-sm' href='/blog-post'>Read More</a></div>
+          </article>
+        </div>
+
+        <!-- PAGINATION -->
+        <div style="display:flex;justify-content:center;gap:8px;margin-top:40px">
+          <button class="btn btn-primary btn-sm" aria-current="page">1</button>
+          <button class="btn btn-outline btn-sm">2</button>
+          <button class="btn btn-outline btn-sm">3</button>
+          <button class="btn btn-outline btn-sm">→</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="section-sm" style="background:var(--primary-light)">
+      <div class="container text-center">
+        <h2 class="section-title" style="font-size:1.4rem">Get Health Tips in Your Inbox</h2>
+        <p style="color:var(--gray-500);margin-bottom:20px">Subscribe for weekly health tips, medication guides, and exclusive discounts.</p>
+        <form class="newsletter-form" style="display:flex;gap:8px;max-width:440px;margin:0 auto" aria-label="Newsletter signup">
+          <label for="blog-newsletter-email" class="visually-hidden">Email address</label>
+          <input type="email" id="blog-newsletter-email" placeholder="Your email address" class="form-control" required>
+          <button type="submit" class="btn btn-primary" style="white-space:nowrap">Subscribe</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+  <script src="js/products-data.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function filterBlog(tag) {
+      document.querySelectorAll('[data-tag]').forEach(btn => { btn.classList.toggle('active', btn.dataset.tag === tag); btn.setAttribute('aria-selected', btn.dataset.tag === tag); });
+      document.querySelectorAll('#blog-grid article').forEach(article => {
+        if (tag === 'all') article.style.display = '';
+        else article.style.display = article.dataset.tag && article.dataset.tag.includes(tag) ? '' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>
