@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Promedic</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    /* ===== CHECKOUT PAGE STYLES ===== */
+    .checkout-page { background: var(--gray-50); min-height: 80vh; padding: 40px 0 80px; }
+    .checkout-title { font-size: 1.8rem; font-weight: 800; color: var(--gray-900); margin-bottom: 8px; }
+    .checkout-subtitle { color: var(--gray-500); margin-bottom: 32px; font-size: 0.95rem; }
+    .checkout-grid { display: grid; grid-template-columns: 1fr 420px; gap: 28px; align-items: start; }
+    @media (max-width: 900px) { .checkout-grid { grid-template-columns: 1fr; } }
+
+    /* Order Summary */
+    .checkout-card { background: #fff; border-radius: 16px; box-shadow: 0 2px 16px rgba(0,0,0,0.07); padding: 28px; }
+    .checkout-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--gray-900); margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-100); }
+    .order-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--gray-100); }
+    .order-item:last-child { border-bottom: none; }
+    .order-item-emoji { font-size: 1.8rem; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--gray-50); border-radius: 10px; flex-shrink: 0; }
+    .order-item-info { flex: 1; }
+    .order-item-name { font-weight: 600; color: var(--gray-900); font-size: 0.9rem; }
+    .order-item-qty { font-size: 0.8rem; color: var(--gray-400); margin-top: 2px; }
+    .order-item-price { font-weight: 700; color: var(--primary); font-size: 0.95rem; }
+    .order-total-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+    .order-total-row.subtotal { color: var(--gray-500); font-size: 0.9rem; }
+    .order-total-row.shipping { color: var(--gray-500); font-size: 0.9rem; }
+    .order-total-row.total { font-weight: 800; font-size: 1.15rem; color: var(--gray-900); border-top: 2px solid var(--gray-100); padding-top: 14px; margin-top: 4px; }
+    .free-shipping-badge { background: var(--primary-light); color: var(--primary); font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+    .empty-cart-msg { text-align: center; padding: 40px 20px; color: var(--gray-400); }
+    .empty-cart-msg a { color: var(--primary); font-weight: 600; }
+
+    /* Form */
+    .form-section-title { font-size: 0.75rem; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.08em; margin: 24px 0 12px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-weight: 600; font-size: 0.85rem; color: var(--gray-700); margin-bottom: 6px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 11px 14px; border: 1.5px solid var(--gray-200); border-radius: 10px;
+      font-family: inherit; font-size: 0.9rem; color: var(--gray-900); background: #fff;
+      transition: border-color 0.2s; outline: none; box-sizing: border-box;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(78,139,136,0.12); }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .required-star { color: var(--red, #ef4444); }
+
+    /* Payment Methods */
+    .payment-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    @media (max-width: 500px) { .payment-methods { grid-template-columns: 1fr 1fr; } }
+    .payment-option { position: relative; }
+    .payment-option input[type="radio"] { position: absolute; opacity: 0; width: 0; }
+    .payment-label {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+      border: 2px solid var(--gray-200); border-radius: 12px; padding: 14px 10px; cursor: pointer;
+      transition: all 0.2s; text-align: center; background: #fff; min-height: 72px;
+    }
+    .payment-label:hover { border-color: var(--primary); background: var(--primary-light); }
+    .payment-option input[type="radio"]:checked + .payment-label {
+      border-color: var(--primary); background: var(--primary-light); box-shadow: 0 0 0 3px rgba(78,139,136,0.18);
+    }
+    .payment-icon { font-size: 1.4rem; }
+    .payment-name { font-size: 0.8rem; font-weight: 700; color: var(--gray-700); }
+
+    /* Card details panel */
+    .card-details { background: var(--gray-50); border-radius: 12px; padding: 16px; margin-bottom: 16px; display: none; }
+    .card-details.active { display: block; }
+    .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* PayPal/Zelle/CashApp info panel */
+    .payment-info-panel { display: none; background: var(--primary-light); border: 1.5px solid rgba(78,139,136,0.25); border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; font-size: 0.88rem; color: var(--gray-700); }
+    .payment-info-panel.active { display: block; }
+    .payment-info-panel strong { color: var(--primary); }
+
+    /* Rx notice */
+    .rx-notice { background: #fff7ed; border: 1.5px solid #fed7aa; border-radius: 10px; padding: 12px 14px; font-size: 0.83rem; color: #92400e; margin-bottom: 16px; display: none; }
+    .rx-notice.active { display: flex; gap: 8px; align-items: flex-start; }
+
+    /* Submit button */
+    .btn-checkout { width: 100%; padding: 15px; font-size: 1rem; font-weight: 700; border-radius: 12px; border: none; cursor: pointer; background: var(--primary); color: #fff; transition: all 0.2s; margin-top: 6px; }
+    .btn-checkout:hover { background: var(--primary-dark, #3a6e6b); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(78,139,136,0.3); }
+    .btn-checkout:disabled { background: var(--gray-300); cursor: not-allowed; transform: none; box-shadow: none; }
+    .secure-note { text-align: center; color: var(--gray-400); font-size: 0.78rem; margin-top: 10px; }
+
+    /* ===== CONFIRMATION MODAL ===== */
+    .confirm-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 9000;
+      display: flex; align-items: center; justify-content: center; padding: 16px;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .confirm-overlay.open { opacity: 1; pointer-events: all; }
+    .confirm-modal {
+      background: #fff; border-radius: 24px; padding: 40px 36px; max-width: 480px; width: 100%;
+      text-align: center; box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+      transform: scale(0.92) translateY(20px); transition: transform 0.3s;
+      max-height: 90vh; overflow-y: auto;
+    }
+    .confirm-overlay.open .confirm-modal { transform: scale(1) translateY(0); }
+    .confirm-check { width: 72px; height: 72px; background: linear-gradient(135deg, #4E8B88, #5fa8a5); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 8px 24px rgba(78,139,136,0.35); }
+    .confirm-check svg { width: 36px; height: 36px; stroke: #fff; stroke-width: 3; fill: none; }
+    .confirm-modal h2 { font-size: 1.55rem; font-weight: 800; color: var(--gray-900); margin-bottom: 6px; }
+    .confirm-modal .order-num { font-size: 0.82rem; color: var(--gray-400); margin-bottom: 20px; }
+    .confirm-modal .order-num span { font-weight: 700; color: var(--primary); }
+    .confirm-details { background: var(--gray-50); border-radius: 14px; padding: 16px; margin: 18px 0; text-align: left; }
+    .confirm-detail-row { display: flex; justify-content: space-between; font-size: 0.88rem; padding: 5px 0; border-bottom: 1px solid var(--gray-100); }
+    .confirm-detail-row:last-child { border-bottom: none; }
+    .confirm-detail-row .label { color: var(--gray-500); }
+    .confirm-detail-row .value { font-weight: 600; color: var(--gray-900); text-align: right; max-width: 60%; }
+    .confirm-items-title { font-size: 0.78rem; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.06em; margin: 14px 0 8px; text-align: left; }
+    .confirm-item-line { display: flex; justify-content: space-between; font-size: 0.87rem; padding: 4px 0; }
+    .confirm-item-line .iname { color: var(--gray-700); }
+    .confirm-item-line .iprice { font-weight: 600; color: var(--gray-900); }
+    .confirm-total-line { display: flex; justify-content: space-between; font-size: 1rem; font-weight: 800; color: var(--gray-900); padding-top: 10px; border-top: 2px solid var(--gray-200); margin-top: 6px; }
+    .confirm-email-note { font-size: 0.83rem; color: var(--gray-500); margin: 16px 0; line-height: 1.5; }
+    .confirm-email-note strong { color: var(--gray-700); }
+    .btn-confirm-done { background: var(--primary); color: #fff; border: none; border-radius: 12px; padding: 13px 32px; font-size: 0.95rem; font-weight: 700; cursor: pointer; width: 100%; margin-top: 4px; transition: all 0.2s; }
+    .btn-confirm-done:hover { background: var(--primary-dark, #3a6e6b); }
+    .confirm-buyer-msg { background: #fffbeb; border: 1.5px solid #fcd34d; border-radius: 12px; padding: 16px 18px; margin: 16px 0; text-align: left; font-size: 0.86rem; color: #78350f; line-height: 1.6; }
+    .confirm-buyer-msg p { margin: 0 0 8px; }
+    .confirm-buyer-msg p:last-child { margin-bottom: 0; }
+    .delivery-badge { display: inline-block; background: #f0fdf4; color: var(--primary); border: 1px solid rgba(78,139,136,0.3); border-radius: 20px; padding: 5px 14px; font-size: 0.82rem; font-weight: 600; margin-bottom: 14px; }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div id="cart-placeholder"></div>
+
+  <main id="main-content">
+    <div class="checkout-page">
+      <div class="container">
+        <h1 class="checkout-title">Secure Checkout</h1>
+        <p class="checkout-subtitle">Complete your order below. All transactions are SSL encrypted.</p>
+
+        <div class="checkout-grid">
+          <!-- LEFT: Customer Form -->
+          <div>
+            <div class="checkout-card">
+              <!-- Contact Info -->
+              <p class="form-section-title">Contact Information</p>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="first-name">First Name <span class="required-star">*</span></label>
+                  <input type="text" id="first-name" name="first_name" placeholder="John" required autocomplete="given-name">
+                </div>
+                <div class="form-group">
+                  <label for="last-name">Last Name <span class="required-star">*</span></label>
+                  <input type="text" id="last-name" name="last_name" placeholder="Doe" required autocomplete="family-name">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="email">Email <span class="required-star">*</span></label>
+                  <input type="email" id="email" name="email" placeholder="john@example.com" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                  <label for="phone">Phone Number <span class="required-star">*</span></label>
+                  <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" required autocomplete="tel">
+                </div>
+              </div>
+
+              <!-- Shipping Address -->
+              <p class="form-section-title">Shipping Address</p>
+              <div class="form-group">
+                <label for="address">Street Address <span class="required-star">*</span></label>
+                <input type="text" id="address" name="address" placeholder="123 Main St, Apt 4B" required autocomplete="street-address">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="city">City <span class="required-star">*</span></label>
+                  <input type="text" id="city" name="city" placeholder="Miami" required autocomplete="address-level2">
+                </div>
+                <div class="form-group">
+                  <label for="state">State <span class="required-star">*</span></label>
+                  <select id="state" name="state" required autocomplete="address-level1">
+                    <option value="">Select state...</option>
+                    <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option>
+                    <option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option>
+                    <option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option>
+                    <option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option>
+                    <option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option>
+                    <option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
+                    <option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option>
+                    <option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option>
+                    <option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
+                    <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option>
+                    <option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option>
+                    <option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option>
+                    <option>Wisconsin</option><option>Wyoming</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="zip">ZIP Code <span class="required-star">*</span></label>
+                  <input type="text" id="zip" name="zip" placeholder="33101" required autocomplete="postal-code" maxlength="10">
+                </div>
+                <div class="form-group">
+                  <label for="country">Country</label>
+                  <input type="text" id="country" name="country" value="United States" readonly style="background:var(--gray-50);color:var(--gray-400)">
+                </div>
+              </div>
+
+              <!-- Payment Method -->
+              <p class="form-section-title">Payment Method <span class="required-star">*</span></p>
+              <div class="payment-methods">
+                <label class="payment-option">
+                  <input type="radio" name="payment_method" value="card" id="pay-card">
+                  <span class="payment-label">
+                    <span class="payment-icon">&#128179;</span>
+                    <span class="payment-name">Credit / Debit Card</span>
+                  </span>
+                </label>
+                <label class="payment-option">
+                  <input type="radio" name="payment_method" value="paypal" id="pay-paypal">
+                  <span class="payment-label">
+                    <span class="payment-icon">&#128179;</span>
+                    <span class="payment-name">PayPal</span>
+                  </span>
+                </label>
+                <label class="payment-option">
+                  <input type="radio" name="payment_method" value="zelle" id="pay-zelle">
+                  <span class="payment-label">
+                    <span class="payment-icon">&#9889;</span>
+                    <span class="payment-name">Zelle</span>
+                  </span>
+                </label>
+                <label class="payment-option">
+                  <input type="radio" name="payment_method" value="cashapp" id="pay-cashapp">
+                  <span class="payment-label">
+                    <span class="payment-icon">&#36;</span>
+                    <span class="payment-name">Cash App</span>
+                  </span>
+                </label>
+              </div>
+
+              <!-- Card Details Panel -->
+              <div class="card-details" id="card-panel">
+                <div class="form-group">
+                  <label for="card-name">Name on Card <span class="required-star">*</span></label>
+                  <input type="text" id="card-name" name="card_name" placeholder="John Doe" autocomplete="cc-name">
+                </div>
+                <div class="form-group">
+                  <label for="card-number">Card Number <span class="required-star">*</span></label>
+                  <input type="text" id="card-number" name="card_number" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="cc-number">
+                </div>
+                <div class="card-row">
+                  <div class="form-group">
+                    <label for="card-expiry">Expiry Date <span class="required-star">*</span></label>
+                    <input type="text" id="card-expiry" name="card_expiry" placeholder="MM / YY" maxlength="7" autocomplete="cc-exp">
+                  </div>
+                  <div class="form-group">
+                    <label for="card-cvv">CVV <span class="required-star">*</span></label>
+                    <input type="text" id="card-cvv" name="card_cvv" placeholder="123" maxlength="4" autocomplete="cc-csc">
+                  </div>
+                </div>
+              </div>
+
+              <!-- PayPal Info -->
+              <div class="payment-info-panel" id="paypal-panel">
+                <strong>PayPal:</strong> Send payment to <strong>rxxx3369@gmail.com</strong> — include your order number in the note. We will process your order once payment is confirmed.
+              </div>
+              <!-- Zelle Info -->
+              <div class="payment-info-panel" id="zelle-panel">
+                <strong>Zelle:</strong> Send payment to <strong>+1 (305) 202-0900</strong> — include your full name and order number. We will process your order once payment is confirmed.
+              </div>
+              <!-- CashApp Info -->
+              <div class="payment-info-panel" id="cashapp-panel">
+                <strong>Cash App:</strong> Send payment to <strong>$ProMedic</strong> — include your order number in the note. We will process your order once payment is confirmed.
+              </div>
+
+              <!-- Notes -->
+              <div class="form-group">
+                <label for="notes">Order Notes <span style="color:var(--gray-400);font-weight:400">(optional)</span></label>
+                <textarea id="notes" name="notes" placeholder="Special instructions, prescription details, delivery preferences..."></textarea>
+              </div>
+
+              <button type="button" class="btn-checkout" id="place-order-btn" onclick="placeOrder()">
+                Place Order &mdash; <span id="btn-total">$0.00</span>
+              </button>
+              <p class="secure-note">&#128274; SSL Encrypted &nbsp;&bull;&nbsp; Your data is safe &nbsp;&bull;&nbsp; FDA-Compliant Pharmacy</p>
+            </div>
+          </div>
+
+          <!-- RIGHT: Order Summary -->
+          <div>
+            <div class="checkout-card" id="order-summary-card">
+              <h3>Order Summary</h3>
+              <div id="order-items-list">
+                <div class="empty-cart-msg">
+                  <p>Your cart is empty.</p>
+                  <a href='/products'>Browse Products</a>
+                </div>
+              </div>
+              <div id="order-totals" style="margin-top:14px;display:none">
+                <div class="order-total-row subtotal">
+                  <span>Subtotal</span>
+                  <span id="summary-subtotal">$0.00</span>
+                </div>
+                <div class="order-total-row shipping">
+                  <span>Shipping</span>
+                  <span id="summary-shipping">$7.99</span>
+                </div>
+                <div class="order-total-row total">
+                  <span>Total</span>
+                  <span id="summary-total">$0.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== CONFIRMATION MODAL ===== -->
+  <div class="confirm-overlay" id="confirm-overlay">
+    <div class="confirm-modal" id="confirm-modal">
+      <div class="confirm-check">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>Order Confirmed!</h2>
+      <p class="order-num">Order <span id="conf-order-num">#PRO-000000</span></p>
+      <div class="delivery-badge">&#128666; Estimated delivery: 3-5 business days</div>
+
+      <div class="confirm-details">
+        <div class="confirm-detail-row">
+          <span class="label">Customer</span>
+          <span class="value" id="conf-name">-</span>
+        </div>
+        <div class="confirm-detail-row">
+          <span class="label">Ship to</span>
+          <span class="value" id="conf-address">-</span>
+        </div>
+        <div class="confirm-detail-row">
+          <span class="label">Payment</span>
+          <span class="value" id="conf-payment">-</span>
+        </div>
+      </div>
+
+      <p class="confirm-items-title">Items Ordered</p>
+      <div id="conf-items-list"></div>
+      <div class="confirm-total-line">
+        <span>Total Paid</span>
+        <span id="conf-total">$0.00</span>
+      </div>
+
+      <div class="confirm-buyer-msg" id="confirm-buyer-msg">
+        <p>Hi <strong id="conf-msg-name">-</strong>,</p>
+        <p>Thank you for your order.</p>
+        <p>To ensure patient safety and order accuracy, a Verification Officer will contact you shortly to confirm your details. Your order cannot be processed or shipped until verification is completed.</p>
+        <p>Once verified, your order will be processed promptly and USPS tracking information will be provided as soon as it becomes available.</p>
+        <p>If any information submitted is incorrect, please place a new order with the correct details.</p>
+        <p><strong>Questions About Your Order?</strong><br>Customer Support: <strong>(262) 299-9253</strong></p>
+        <p>Thank You,<br><strong id="conf-msg-name2">-</strong></p>
+      </div>
+
+      <button class="btn-confirm-done" onclick="closeConfirmModal()">Done &mdash; Continue Shopping</button>
+    </div>
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/products-data.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    emailjs.init('YOUR_EMAILJS_PUBLIC_KEY');
+  </script>
+  <script>
+    // ===== LOAD CART & RENDER ORDER SUMMARY =====
+    document.addEventListener('DOMContentLoaded', () => {
+      renderOrderSummary();
+      setupPaymentToggle();
+      setupCardFormatting();
+    });
+
+    function renderOrderSummary() {
+      const cart = JSON.parse(localStorage.getItem('promedic_cart') || '[]');
+      const list = document.getElementById('order-items-list');
+      const totalsEl = document.getElementById('order-totals');
+      const btnTotal = document.getElementById('btn-total');
+
+      if (!cart.length) {
+        list.innerHTML = `<div class="empty-cart-msg"><p>Your cart is empty.</p><a href="products.html">Browse Products</a></div>`;
+        totalsEl.style.display = 'none';
+        btnTotal.textContent = '$0.00';
+        document.getElementById('place-order-btn').disabled = true;
+        return;
+      }
+
+      list.innerHTML = cart.map(item => `
+        <div class="order-item">
+          <div class="order-item-emoji">${item.emoji}</div>
+          <div class="order-item-info">
+            <div class="order-item-name">${item.name}</div>
+            <div class="order-item-qty">Qty: ${item.qty}</div>
+          </div>
+          <div class="order-item-price">$${(item.price * item.qty).toFixed(2)}</div>
+        </div>
+      `).join('');
+
+      const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      const shipping = subtotal >= 75 ? 0 : 7.99;
+      const total = subtotal + shipping;
+
+      document.getElementById('summary-subtotal').textContent = '$' + subtotal.toFixed(2);
+      document.getElementById('summary-shipping').innerHTML = shipping === 0
+        ? '<span class="free-shipping-badge">FREE</span>'
+        : '$' + shipping.toFixed(2);
+      document.getElementById('summary-total').textContent = '$' + total.toFixed(2);
+      totalsEl.style.display = 'block';
+      btnTotal.textContent = '$' + total.toFixed(2);
+    }
+
+    function checkRxItems() {
+      const cart = JSON.parse(localStorage.getItem('promedic_cart') || '[]');
+      const hasRx = cart.some(i => i.requires_rx);
+      if (hasRx) document.getElementById('rx-notice').classList.add('active');
+    }
+
+    // ===== PAYMENT METHOD TOGGLE =====
+    function setupPaymentToggle() {
+      document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+          const val = radio.value;
+          document.getElementById('card-panel').classList.toggle('active', val === 'card');
+          document.getElementById('paypal-panel').classList.toggle('active', val === 'paypal');
+          document.getElementById('zelle-panel').classList.toggle('active', val === 'zelle');
+          document.getElementById('cashapp-panel').classList.toggle('active', val === 'cashapp');
+          // Update required on card fields
+          const cardFields = ['card-name', 'card-number', 'card-expiry', 'card-cvv'];
+          cardFields.forEach(id => {
+            document.getElementById(id).required = (val === 'card');
+          });
+        });
+      });
+    }
+
+    // ===== CARD NUMBER FORMATTING =====
+    function setupCardFormatting() {
+      const cardNum = document.getElementById('card-number');
+      if (cardNum) {
+        cardNum.addEventListener('input', e => {
+          let v = e.target.value.replace(/\D/g, '').substring(0, 16);
+          e.target.value = v.match(/.{1,4}/g)?.join(' ') || v;
+        });
+      }
+      const expiry = document.getElementById('card-expiry');
+      if (expiry) {
+        expiry.addEventListener('input', e => {
+          let v = e.target.value.replace(/\D/g, '').substring(0, 4);
+          if (v.length >= 3) v = v.substring(0,2) + ' / ' + v.substring(2);
+          e.target.value = v;
+        });
+      }
+    }
+
+    // ===== PLACE ORDER =====
+    function placeOrder() {
+      const cart = JSON.parse(localStorage.getItem('promedic_cart') || '[]');
+      if (!cart.length) { showToast('Your cart is empty!', 'success'); return; }
+
+      // Basic validation
+      const required = ['first-name', 'last-name', 'email', 'phone', 'address', 'city', 'state', 'zip'];
+      for (const id of required) {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) {
+          el.focus(); el.style.borderColor = '#ef4444';
+          setTimeout(() => el.style.borderColor = '', 2000);
+          showToast('Please fill in all required fields.', 'success');
+          return;
+        }
+      }
+      const payMethod = document.querySelector('input[name="payment_method"]:checked');
+      if (!payMethod) {
+        showToast('Please select a payment method.', 'success');
+        return;
+      }
+      if (payMethod.value === 'card') {
+        const cardFields = ['card-name', 'card-number', 'card-expiry', 'card-cvv'];
+        for (const id of cardFields) {
+          const el = document.getElementById(id);
+          if (!el.value.trim()) {
+            el.focus(); el.style.borderColor = '#ef4444';
+            setTimeout(() => el.style.borderColor = '', 2000);
+            showToast('Please fill in all card details.', 'success');
+            return;
+          }
+        }
+      }
+
+      // Generate order data
+      const orderNum = 'PRO-' + Date.now().toString().slice(-6);
+      const firstName = document.getElementById('first-name').value.trim();
+      const lastName = document.getElementById('last-name').value.trim();
+      const fullName = firstName + ' ' + lastName;
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const city = document.getElementById('city').value.trim();
+      const state = document.getElementById('state').value;
+      const zip = document.getElementById('zip').value.trim();
+      const fullAddress = address + ', ' + city + ', ' + state + ' ' + zip;
+      const notes = document.getElementById('notes').value.trim();
+      const paymentLabel = { card: 'Credit / Debit Card', paypal: 'PayPal', zelle: 'Zelle', cashapp: 'Cash App' }[payMethod.value];
+
+      const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      const shipping = subtotal >= 75 ? 0 : 7.99;
+      const total = subtotal + shipping;
+
+      const itemsText = cart.map(i => `${i.name} x${i.qty} = $${(i.price*i.qty).toFixed(2)}`).join('\n');
+      const itemsHtml = cart.map(i => `${i.emoji} ${i.name} x${i.qty} — $${(i.price*i.qty).toFixed(2)}`).join('<br>');
+
+      // Send confirmation email to buyer via EmailJS
+      try {
+        emailjs.send('service_promedic', 'template_promedic', {
+          to_email: email,
+          buyer_name: fullName,
+          order_number: orderNum,
+          order_items: itemsText,
+          order_total: '$' + total.toFixed(2),
+          ship_to: fullAddress,
+          payment_method: paymentLabel,
+          phone: phone
+        }).catch(() => {});
+      } catch(e) {}
+
+      // Save order to Google Sheets
+      fetch('/api/save-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderNum, fullName, email, phone,
+          address, city, state, zip,
+          items: itemsText,
+          subtotal: '$' + subtotal.toFixed(2),
+          shipping: shipping === 0 ? 'FREE' : '$' + shipping.toFixed(2),
+          total: '$' + total.toFixed(2),
+          paymentMethod: paymentLabel,
+          notes
+        })
+      }).catch(() => {});
+
+      // Show confirmation modal
+      document.getElementById('conf-order-num').textContent = '#' + orderNum;
+      document.getElementById('conf-name').textContent = fullName;
+      document.getElementById('conf-address').textContent = fullAddress;
+      document.getElementById('conf-payment').textContent = paymentLabel;
+      document.getElementById('conf-msg-name').textContent = fullName;
+      document.getElementById('conf-msg-name2').textContent = fullName;
+
+      const confItems = document.getElementById('conf-items-list');
+      confItems.innerHTML = cart.map(item => `
+        <div class="confirm-item-line">
+          <span class="iname">${item.emoji} ${item.name} &times;${item.qty}</span>
+          <span class="iprice">$${(item.price * item.qty).toFixed(2)}</span>
+        </div>
+      `).join('') + `
+        <div class="confirm-item-line" style="color:var(--gray-400);font-size:0.82rem">
+          <span>Shipping</span>
+          <span>${shipping === 0 ? 'FREE' : '$' + shipping.toFixed(2)}</span>
+        </div>
+      `;
+      document.getElementById('conf-total').textContent = '$' + total.toFixed(2);
+
+      // Open modal
+      document.getElementById('confirm-overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+
+      // Clear cart
+      localStorage.removeItem('promedic_cart');
+    }
+
+    function closeConfirmModal() {
+      document.getElementById('confirm-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+      window.location.href = 'products.html';
+    }
+  </script>
+</body>
+</html>
