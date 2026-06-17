@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 80" fill="none">
+  <!-- Caduceus Icon -->
+  <g fill="#4E8B88">
+    <!-- Top orb -->
+    <circle cx="40" cy="9" r="5.5"/>
+
+    <!-- Staff -->
+    <rect x="37.5" y="9" width="5" height="65" rx="2.5"/>
+
+    <!-- Left wing - upper blade -->
+    <path d="M40 22 C34 17 22 14 12 17 C7 19 7 24 12 25 C19 26 30 22 40 27"/>
+    <!-- Left wing - lower blade -->
+    <path d="M40 27 C30 23 18 23 12 25 C7 27 9 31 14 30 C22 28 32 28 40 32"/>
+
+    <!-- Right wing - upper blade -->
+    <path d="M40 22 C46 17 58 14 68 17 C73 19 73 24 68 25 C61 26 50 22 40 27"/>
+    <!-- Right wing - lower blade -->
+    <path d="M40 27 C50 23 62 23 68 25 C73 27 71 31 66 30 C58 28 48 28 40 32"/>
+  </g>
+
+  <!-- Left snake -->
+  <path d="M40 32 C30 38 30 44 40 46 C50 48 50 55 40 58 C30 61 31 68 40 72"
+        stroke="#4E8B88" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+
+  <!-- Right snake -->
+  <path d="M40 32 C50 38 50 44 40 46 C30 48 30 55 40 58 C50 61 49 68 40 72"
+        stroke="#4E8B88" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+
+  <!-- Snake left head -->
+  <ellipse cx="34.5" cy="74.5" rx="4.5" ry="3" transform="rotate(-25 34.5 74.5)" fill="#4E8B88"/>
+  <!-- Snake right head -->
+  <ellipse cx="45.5" cy="74.5" rx="4.5" ry="3" transform="rotate(25 45.5 74.5)" fill="#4E8B88"/>
+
+  <!-- "Promedic" text -->
+  <text x="88" y="54"
+        font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+        font-size="46"
+        font-weight="700"
+        letter-spacing="-1"
+        fill="#4E8B88">Promedic</text>
+</svg>
