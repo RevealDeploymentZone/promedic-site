@@ -204,10 +204,12 @@ function getCategoryBadge(category) {
 
 function renderProductCard(product) {
   const savings = product.originalPrice ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0;
+  const imagePath = `/images/products/${product.name}.png`;
   return `
     <article class="product-card" data-id="${product.id}" data-category="${product.category}" itemscope itemtype="https://schema.org/Product">
       <div class="product-image">
-        <span itemprop="image" aria-hidden="true">${product.emoji}</span>
+        <img src="${imagePath}" alt="${product.name}" itemprop="image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+        <span class="product-image-fallback" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:64px;" aria-hidden="true">${product.emoji}</span>
         ${savings > 0 ? `<span style="position:absolute;top:10px;right:44px;background:#dc2626;color:white;font-size:11px;font-weight:700;padding:3px 7px;border-radius:4px;">-${savings}%</span>` : ''}
         <button class="product-wishlist" aria-label="Add ${product.name} to wishlist" onclick="toggleWishlist(${product.id})">&#9825;</button>
       </div>
