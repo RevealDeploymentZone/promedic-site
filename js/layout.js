@@ -4,7 +4,7 @@ const HEADER_HTML = `
   <div class="container">
     <div class="top-bar-left">
       <span>📞 <a href="tel:+13052020900">+1 (305) 202-0900</a></span>
-      <span>✉️ <a href="mailto:rxxx3369@gmail.com">rxxx3369@gmail.com</a></span>
+      <span>✉️ <a href="mailto:promedic.rx@gmail.com">promedi.rx@gmail.com</a></span>
       <span>🕐 24/7 Customer Support</span>
     </div>
     <div class="top-bar-right">
@@ -84,7 +84,7 @@ const FOOTER_HTML = `
           </div>
           <p>Your trusted partner for affordable, FDA-compliant medications, supplements, and medical devices. Serving all 50 states.</p>
           <div class="footer-contact-item"><span>📞</span><a href="tel:+13052020900" style="color:rgba(255,255,255,0.6)">+1 (305) 202-0900</a></div>
-          <div class="footer-contact-item"><span>✉️</span><a href="mailto:rxxx3369@gmail.com" style="color:rgba(255,255,255,0.6)">rxxx3369@gmail.com</a></div>
+          <div class="footer-contact-item"><span>✉️</span><a href="mailto:promedic.rx@gmail.com" style="color:rgba(255,255,255,0.6)">promedic.rx@gmail.com</a></div>
           <div class="footer-contact-item"><span>📍</span><span>Serving all 50 US States</span></div>
         </div>
         <div class="footer-col">
@@ -122,7 +122,7 @@ const FOOTER_HTML = `
   </div>
   <div class="container">
     <div class="footer-bottom">
-      <p>&copy; 2026 Promedic. All rights reserved. | Business Legal Name: Promedic</p>
+      <p>&copy; 2026 Promedic. All rights reserved. | Managed By <a href="https://revealrank.com/">Reveal Rank</a>
       <div class="footer-badges">
         <span class="footer-badge">FDA Compliant</span>
         <span class="footer-badge">SSL Secured</span>
