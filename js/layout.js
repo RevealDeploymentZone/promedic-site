@@ -4,7 +4,7 @@ const HEADER_HTML = `
   <div class="container">
     <div class="top-bar-left">
       <span>📞 <a href="tel:+13052020900">+1 (305) 202-0900</a></span>
-      <span>✉️ <a href="mailto:promedic.rx@gmail.com">promedi.rx@gmail.com</a></span>
+      <span>✉️ <a href="mailto:promedic.rx@gmail.com">promedic.rx@gmail.com</a></span>
       <span>🕐 24/7 Customer Support</span>
     </div>
     <div class="top-bar-right">
