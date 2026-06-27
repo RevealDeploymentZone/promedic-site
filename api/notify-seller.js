@@ -44,7 +44,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        from: 'Promedic Orders <onboarding@resend.dev>',
+        from: 'Promedic Orders <orders@promediic.com>',
         to: ['promedic.rx@gmail.com'],
         subject: `New Order #${orderNum} — ${fullName} — ${total}`,
         html
