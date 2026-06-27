@@ -531,7 +531,7 @@
       } catch(e) {}
 
       // Save order to Google Sheets
-      fetch('/api/save-order', {
+      fetch('/api/notify-seller', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -584,3 +584,4 @@
   </script>
 </body>
 </html>
+
