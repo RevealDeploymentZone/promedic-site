@@ -284,8 +284,8 @@
   <script src="js/main.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Show 8 featured products
-      const featured = PROMEDIC_PRODUCTS.filter(p => [1,26,51,76,2,52,77,31].includes(p.id));
+      // Show 15 featured products - Men's Health ED medications
+      const featured = PROMEDIC_PRODUCTS.filter(p => [149,150,151,152,153,154,155,156,157,158,159,160,161,162,163].includes(p.id));
       document.getElementById('featured-products').innerHTML = featured.map(renderProductCard).join('');
     });
   </script>
